@@ -1,7 +1,9 @@
 import styles from './styles.module.css';
 import { useState } from 'react';
-import { PlayerSummary } from 'components/PlayerSummary';
-import { opponentStats, playerStats } from 'shared';
+import { BattleMenu } from 'components/BattleMenu/BattleMenu';
+import { PlayerSummary } from 'components/PlayerSummary/PlayerSummary';
+import { opponentStats, playerStats } from 'shared/characters';
+
 
 export const Battle = () => {
 
@@ -33,6 +35,13 @@ export const Battle = () => {
         </div>
       </div>
 
+      <div className={styles.hudChild}>
+        <BattleMenu
+          onAttack={() => console.log('Attack!')}
+          onMagic={() => console.log('Magic!')}
+          onHeal={() => console.log('Heal!')}
+        />
+      </div>
     </div>
   );
 }

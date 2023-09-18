@@ -1,4 +1,4 @@
-import { Bar } from 'components';
+import { Bar } from 'components/Bar/Bar';
 import styles from './styles.module.css';
 
 const red = '#821200';

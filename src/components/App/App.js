@@ -1,6 +1,9 @@
 import { useState } from 'react';
 import styles from './styles.module.css';
-import { Battle, StartMenu } from 'components';
+import { Battle } from 'components/Battle/Battle';
+import { StartMenu } from 'components/StartMenu/StartMenu';
+
+
 
 export const App = () => {
   
