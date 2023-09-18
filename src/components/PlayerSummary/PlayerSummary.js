@@ -16,7 +16,7 @@ export const PlayerSummary = ({ mainPlayer = false, name, level, health, maxHeal
       </div>
 
       <div className={styles.health}>
-        <Bar label="HP" value={health} maxHealth={maxHealth} />
+        <Bar label="HP" value={health} maxValue={maxHealth} />
       </div>
 
     </div>

@@ -1,19 +1,36 @@
 import styles from './styles.module.css';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { BattleAnnouncer } from 'components/BattleAnnouncer/BattleAnnouncer';
 import { BattleMenu } from 'components/BattleMenu/BattleMenu';
 import { PlayerSummary } from 'components/PlayerSummary/PlayerSummary';
 import { opponentStats, playerStats } from 'shared/characters';
+import { useBattleSequence } from 'hooks/useBattleSquence';
+import { useAIOpponent } from 'hooks/useAIOpponent';
 
 
 
 
 export const Battle = () => {
 
-  const [opponentHealth, setOpponentHealth] = useState(opponentStats.maxHealth);
-  const [playerHealth, setplayerHealth] = useState(playerStats.maxHealth);
+  const [sequence, setSequence] = useState({});
 
-  const [announcerMessage, setAnnouncerMessage] = useState('');
+  const {
+    turn,
+    inSequence,
+    playerHealth,
+    opponentHealth,
+    announcerMessage,
+    playerAnimation,
+    opponentAnimation,
+  } = useBattleSequence(sequence);
+
+  const aiChoice = useAIOpponent(turn);
+
+  useEffect(() => {
+    if (aiChoice && turn === 1 && !inSequence) {
+      setSequence({ turn, mode: aiChoice })
+    }
+  });
 
   return (
     <>
@@ -38,7 +55,7 @@ export const Battle = () => {
             <img
               alt={playerStats.name}
               src={playerStats.img} 
-              //className={styles.}
+              className={styles[playerAnimation]}
             />
           </div>
 
@@ -46,7 +63,7 @@ export const Battle = () => {
           <img
               alt={opponentStats.name}
               src={opponentStats.img} 
-              //className={styles.}
+              className={styles[opponentAnimation]}
             />
           </div>
         </div>
@@ -74,9 +91,9 @@ export const Battle = () => {
           </div>
           <div className={styles.hudChild}>
             <BattleMenu
-              onAttack={() => console.log('Attack!')}
-              onMagic={() => console.log('Magic!')}
-              onHeal={() => console.log('Heal!')}
+              onAttack={() => setSequence({ turn, mode: 'attack' })}
+              onMagic={() => setSequence({ turn, mode: 'magic' })}
+              onHeal={() => setSequence({ turn, mode: 'heal' })}
             />
           </div>
       </div>
