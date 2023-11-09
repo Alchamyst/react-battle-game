@@ -6,11 +6,12 @@ import { PlayerSummary } from 'components/PlayerSummary/PlayerSummary';
 import { opponentStats, playerStats } from 'shared/characters';
 import { useBattleSequence } from 'hooks/useBattleSquence';
 import { useAIOpponent } from 'hooks/useAIOpponent';
+import { wait } from "shared/helpers";
 
 
 
 
-export const Battle = () => {
+export const Battle = ({ onGameEnd }) => {
 
   const [sequence, setSequence] = useState({});
 
@@ -30,7 +31,17 @@ export const Battle = () => {
     if (aiChoice && turn === 1 && !inSequence) {
       setSequence({ turn, mode: aiChoice })
     }
-  });
+  },[aiChoice, turn, inSequence]);
+
+  useEffect(() => {
+    if(playerHealth === 0 || opponentHealth === 0){
+      (async () => {
+        await wait(1000);
+        onGameEnd(playerHealth === 0 ? opponentStats : playerStats)
+      })();
+    }
+
+  }, [playerHealth, opponentHealth, onGameEnd]);
 
   return (
     <>
@@ -90,11 +101,13 @@ export const Battle = () => {
             />
           </div>
           <div className={styles.hudChild}>
+          {!sequence.inSequence &&
             <BattleMenu
               onAttack={() => setSequence({ turn, mode: 'attack' })}
               onMagic={() => setSequence({ turn, mode: 'magic' })}
               onHeal={() => setSequence({ turn, mode: 'heal' })}
             />
+          }
           </div>
       </div>
       </div>
